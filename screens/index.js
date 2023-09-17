@@ -8,6 +8,7 @@ import NewArrival from "./NewArrival";
 import Login from "./Login";
 import Favorites from "./Favorites";
 import Orders from "./Orders";
+import SignUp from "./SignUp";
 
 
 export {
@@ -20,4 +21,5 @@ export {
     Login,
     Favorites,
     Orders,
+    SignUp,
 }

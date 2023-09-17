@@ -4,7 +4,7 @@ import React, {useEffect} from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import { NavigationContainer } from '@react-navigation/native'
 import BottomTabNavigator from './navigation/BottomTabNavigator'
-import { Cart, ProductDetails, NewArrival, Login, Favorites, Orders} from './screens'
+import { Cart, ProductDetails, NewArrival, Login, Favorites, Orders, SignUp} from './screens'
 
 const Stack = createStackNavigator()
 
@@ -69,6 +69,14 @@ const App = () => {
           <Stack.Screen 
             name='Orders'
             component={Orders}
+            options={{
+              headerShown: false
+            }}
+          />
+
+          <Stack.Screen 
+            name='SignUp'
+            component={SignUp}
             options={{
               headerShown: false
             }}

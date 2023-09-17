@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, StatusBar, ScrollView, Alert } from 'react-native'
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useRoute } from '@react-navigation/native';
 import { COLORS, SIZES } from '../assets/constants'
 
@@ -9,11 +9,36 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = ({navigation}) => {
 
   const [userData, setUserData] = useState(null)
   const [userLogin, setUserLogin] = useState(false) 
+
+  useEffect(() => {
+    checkExistingUser()
+  }, [])
+
+  const checkExistingUser = async () => {
+    const id = await AsyncStorage.getItem("id")
+    const userId = `user${JSON.parse(id)}`
+
+    try {
+      const currentUser = await AsyncStorage.getItem(userId)
+      console.log("current user == ", currentUser)
+
+      if(currentUser !== null) {
+        const parseData = JSON.parse(currentUser)
+        setUserData(parseData)
+        setUserLogin(true)
+      } else {
+        // navigation.navigate("Login")
+      }
+    } catch(error) {
+      console.log("Error retrieving the data: ", error)
+    }
+  }
 
 
   const clearCache = () => {
@@ -50,6 +75,17 @@ const Profile = ({navigation}) => {
     )
   }
 
+  const userLogout = async () => {
+    const id = await AsyncStorage.getItem("id")
+    const userId = `user${JSON.parse(id)}`
+    try {
+      await AsyncStorage.multiRemove([userId, 'id'])
+      navigation.replace("Bottom Navigation")
+    }catch(error) {
+      console.log('Error logging out the user ', error)
+    }
+  }
+
   const logout = () => {
     Alert.alert(
       "Logout",
@@ -60,9 +96,9 @@ const Profile = ({navigation}) => {
           onPress: () => console.log("cancel pressed")
         }, {
           text: "Continue",
-          onPress: () => console.log("continue pressed")
+          onPress: () => userLogout()
         },
-        {defaultindex: 1}
+        // {defaultindex: 1}
       ]
     )
   }

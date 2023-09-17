@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { StyleSheet, Text, Viewm, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, Viewm, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React from 'react'
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -10,10 +10,15 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { COLORS, SIZES } from '../../assets/constants';
 
 
-const Button = ({title, onPress}) => {
+const Button = ({title, onPress, isValid, loader}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.btnStyle}>
+    <TouchableOpacity onPress={onPress} style={styles.btnStyle(isValid === false ? COLORS.gray : COLORS.primary)}>
+      {!loader ? (
         <Text style={styles.btnText}>{title}</Text>
+      ): (
+        <ActivityIndicator />
+      )}
+        
     </TouchableOpacity>
   )
 }
@@ -21,15 +26,15 @@ const Button = ({title, onPress}) => {
 export default Button
 
 const styles = StyleSheet.create({
-    btnStyle: {
+    btnStyle: (backgroundColor) => ({
         height: 50,
         width: "100%",
         marginVertical: 20,
-        backgroundColor: COLORS.primary,
+        backgroundColor: backgroundColor,
         justifyContent: 'center',
         alignItems: "center",
         borderRadius: 12,
-    },
+    }),
     btnText: {
         fontFamily: "Poppins-Bold",
         color: COLORS.white,
